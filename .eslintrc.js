@@ -11,7 +11,7 @@ module.exports = {
     sourceType: 'module',
   },
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'html-jsx'],
-  ignorePatterns: ['dist', 'node_modules'],
+  ignorePatterns: ['dist', 'node_modules', 'vendor'],
   plugins: ['import'],
   rules: {
     '@typescript-eslint/ban-ts-comment': 'off',

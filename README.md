@@ -20,23 +20,28 @@ WebAssembly build of a small, pretty fast FFT library (PFFFT).
 
 ## Examples
 
-<details id="example$node" title="node" open><summary><span><a href="#example$node">#</a></span>  <code><strong>node</strong></code></summary>  <ul>    <details id="source$node" title="node source code" open><summary><span><a href="#source$node">#</a></span>  <code><strong>view source</strong></code></summary>  <a href="example/node.ts">example/node.ts</a>  <p>
+<details id="example$web" title="web" open><summary><span><a href="#example$web">#</a></span>  <code><strong>web</strong></code></summary>  <ul>    <details id="source$web" title="web source code" open><summary><span><a href="#source$web">#</a></span>  <code><strong>view source</strong></code></summary>  <a href="example/web.ts">example/web.ts</a>  <p>
 
 ```ts
-import { add } from 'pretty-fast-fft'
+import { createRunner } from 'pretty-fast-fft'
 
-console.log(add(1, 2))
-```
+const blockSize = 4096
+const stepSize = 1024
 
-</p>
-</details></ul></details><details id="example$web" title="web" open><summary><span><a href="#example$web">#</a></span>  <code><strong>web</strong></code></summary>  <ul>    <details id="source$web" title="web source code" open><summary><span><a href="#source$web">#</a></span>  <code><strong>view source</strong></code></summary>  <a href="example/web.ts">example/web.ts</a>  <p>
+const main = async () => {
+  const runner = await createRunner(blockSize, stepSize)
 
-```ts
-import { add } from 'pretty-fast-fft'
+  const buffer = await (await fetch('./test/fixtures/sound.ogg')).arrayBuffer()
+  const ctx = new OfflineAudioContext(1, 1, 44100)
+  const audioBuffer = await ctx.decodeAudioData(buffer)
+  const floats = audioBuffer.getChannelData(0)
 
-const main = document.querySelector('main')!
+  const stft_magnitudes = runner.processAudio(floats)
 
-main.innerHTML = `<h1>1 + 2 = ${add(1, 2)}</h1>`
+  console.log(stft_magnitudes)
+}
+
+main()
 ```
 
 </p>

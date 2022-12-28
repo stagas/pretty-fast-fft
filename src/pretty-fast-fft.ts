@@ -12,6 +12,7 @@ export async function createRunner(blockSize = 1024, stepSize = 128) {
     ) {
       const stft_magnitudes: number[][] = []
 
+      let prevValidNumber = 0
       for (let ai = 0; ai < samples.length - blockSize; ai += stepSize) {
         const audio_block = samples.slice(ai, ai + blockSize)
 
@@ -26,7 +27,9 @@ export async function createRunner(blockSize = 1024, stepSize = 128) {
         const magnitudes = new Array(blockSize * 0.5)
 
         for (let i = 0; i < blockSize; i += 2) {
-          magnitudes[(i * 0.5) | 0] = fft_result[i] * fft_result[i] + fft_result[i + 1] * fft_result[i + 1]
+          let result = fft_result[i] * fft_result[i] + fft_result[i + 1] * fft_result[i + 1]
+          if (!Number.isFinite(result)) result = prevValidNumber
+          prevValidNumber = magnitudes[(i * 0.5) | 0] = result
         }
 
         stft_magnitudes.push(magnitudes)

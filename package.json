@@ -3,7 +3,7 @@
   "author": "stagas",
   "short": "stagas/pretty-fast-fft",
   "description": "WebAssembly build of a small, pretty fast FFT library (PFFFT).",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "repository": {
     "type": "git",
